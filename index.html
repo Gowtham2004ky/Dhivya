@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ticket Booking Chatbot</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <style>
+    /* styles.css */
+/* styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 20px;
+}
+
+#chatbot, #admin-dashboard {
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 350px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#chatbot {
+    background-color: #ffffff;
+}
+
+#admin-dashboard {
+    background-color: #2a9d8f;
+    color: white;
+}
+
+h2 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #264653;
+}
+
+#chatbox {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#messages {
+    height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    background-color: #e9ecef;
+}
+
+#messages p {
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 8px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+#messages p:nth-child(odd) {
+    background-color: #264653;
+    color: white;
+    align-self: flex-start;
+}
+
+#messages p:nth-child(even) {
+    background-color: #2a9d8f;
+    color: white;
+    align-self: flex-end;
+}
+
+#user-input {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #264653;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1d3557;
+}
+
+#analytics p {
+    font-size: 1.2em;
+}
+
+
+</style>
+    <body>
+        <!-- Visitor Chatbot Interface -->
+        <div id="chatbot">
+            <h2>Chatbot</h2>
+            <div id="chatbox">
+                <div id="messages"></div>
+                <input type="text" id="user-input"
+                    placeholder="Type your message...">
+                <button onclick="processInput()">Send</button>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard">
+            <h2>Admin Dashboard</h2>
+            <div id="analytics">
+                <p>Total Bookings: <span id="total-bookings">0</span></p>
+                <p>Total Revenue: $<span id="total-revenue">0.00</span></p>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+    <script>
+    // script.js
+
+// Sample data sets for demonstration
+const languages = ["English", "Spanish", "French"];
+const tickets = ["Standard", "VIP", "Student"];
+let bookings = 0;
+let revenue = 0;
+
+// Function to add a message to the chat
+function addMessage(message) {
+    const messagesDiv = document.getElementById("messages");
+    const newMessage = document.createElement("p");
+    newMessage.textContent = message;
+    messagesDiv.appendChild(newMessage);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom
+}
+
+// Function to process user input
+function processInput() {
+    const userInput = document.getElementById("user-input").value;
+    document.getElementById("user-input").value = ""; // Clear input
+
+    addMessage("You: " + userInput);
+
+    // Basic flow control based on user input
+    if (userInput.toLowerCase() === "start") {
+        addMessage("Chatbot: Please select a language: " + languages.join(", "));
+    } else if (languages.includes(userInput)) {
+        addMessage("Chatbot: You selected " + userInput + ". Please choose a ticket type: " + tickets.join(", "));
+    } else if (tickets.includes(userInput)) {
+        addMessage("Chatbot: You selected " + userInput + " ticket. Checking availability...");
+        setTimeout(() => {
+            addMessage("Chatbot: Ticket available. Proceeding to payment.");
+            // Simulate payment and confirmation
+            bookings += 1;
+            revenue += userInput === "VIP" ? 100 : userInput === "Standard" ? 50 : 30; // Example pricing
+            updateDashboard();
+            addMessage("Chatbot: Payment successful! Your booking is confirmed.");
+        }, 1000);
+    } else {
+        addMessage("Chatbot: I didn't understand that. Type 'start' to begin.");
+    }
+}
+
+// Function to update admin dashboard
+function updateDashboard() {
+    document.getElementById("total-bookings").textContent = bookings;
+    document.getElementById("total-revenue").textContent = revenue.toFixed(2);
+}
+
+</script>
+</html>
